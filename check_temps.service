@@ -1,0 +1,13 @@
+[Unit]
+Description = Check Home Temperature and Humidity and submit metrics to InfluxDB
+After = network.target
+
+[Service]
+User = root
+Group = root
+Restart=always
+RestartSec=10
+ExecStart = /usr/local/etc/check_temps/check_temps.py
+
+[Install]
+WantedBy = multi-user.target
