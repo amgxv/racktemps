@@ -34,18 +34,18 @@ def push():
             )
 
         for i in range(5):
-            logging.debug(f'Starting read {i}')
+            logging.debug('Starting read {}'.format(i))
             h, t = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, GPIO_PIN)
             if h is not None and t is not None:
-                logging.debug(f'Temperature {temp}')
+                logging.debug('Temperature {}'.format(temp))
                 temp.append(t)
-                logging.debug(f'Humidity {hum}')
+                logging.debug('Humidity {}'.format(hum))
                 hum.append(h)
 
         temp = statistics.median(sorted(temp))
-        logging.debug(f'Temperature median : {temp}')
+        logging.debug('Temperature median : {}'.format(temp))
         hum = statistics.median(sorted(hum))
-        logging.debug(f'Humidity median : {hum}')
+        logging.debug('Humidity median : {}'.format(hum))
 
         points = [
            {
@@ -63,7 +63,10 @@ def push():
         ]
 
         # https://influxdb-python.readthedocs.io/en/latest/api-documentation.html#influxdb.InfluxDBClient.write_points
-        logging.debug(f'Writing points to InfluxDB {INFLUX_HOST}/{INFLUX_DATABASE}')
+        logging.debug('Writing points to InfluxDB {}/{}'.format(
+            INFLUX_HOST,
+            INFLUX_DATABASE
+        ))
         client.write_points(
             points,
             retention_policy=INFLUX_RETENTION_POLICY,
