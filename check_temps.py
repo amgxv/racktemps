@@ -55,7 +55,7 @@ def push():
 
         logging.debug('Humidity Values : {}'.format(hum))
         hum = statistics.median(sorted(hum))
-        logging.debug('Temperature Median : {}'.format(hum))
+        logging.debug('Humidity Median : {}'.format(hum))
 
         points = [
            {
