@@ -44,15 +44,18 @@ def push():
             logging.debug('Starting read {}'.format(i))
             h, t = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, GPIO_PIN)
             if h is not None and t is not None:
-                logging.debug('Temperature {}'.format(temp))
+                logging.debug('Temperature {}'.format(t))
                 temp.append(t)
-                logging.debug('Humidity {}'.format(hum))
+                logging.debug('Humidity {}'.format(h))
                 hum.append(h)
 
+        logging.debug('Temperature Values : {}'.format(temp))
         temp = statistics.median(sorted(temp))
-        logging.debug('Temperature median : {}'.format(temp))
+        logging.debug('Temperature Median : {}'.format(temp))
+
+        logging.debug('Humidity Values : {}'.format(hum))
         hum = statistics.median(sorted(hum))
-        logging.debug('Humidity median : {}'.format(hum))
+        logging.debug('Temperature Median : {}'.format(hum))
 
         points = [
            {
