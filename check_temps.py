@@ -11,7 +11,14 @@ def push():
     temp = []
     hum = []
 
-    logging.basicConfig(level=logging.DEBUG, filename=LOGFILE, filemode='w')
+    log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename=LOGFILE,
+        format=log_format,
+        filemode='a')
+    logger = logging.getLogger()
+    logger.addHandler(logging.StreamHandler())
 
     try:
         if INFLUX_SSL == "True":
