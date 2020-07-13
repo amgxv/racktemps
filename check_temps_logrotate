@@ -1,0 +1,8 @@
+/var/log/influx_temps_debug.log {
+    rotate 5
+    daily
+    compress
+    delaycompress
+    missingok
+    notifempty
+}
