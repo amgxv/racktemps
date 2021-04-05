@@ -1,11 +1,16 @@
 #!/usr/bin/python3
 
-import Adafruit_DHT
 from influxdb import InfluxDBClient
 import statistics
 import logging
 from envs import *
+from envirophat import weather
+from subprocess import PIPE, Popen
 
+def get_cpu_temperature():
+    process = Popen(['vcgencmd', 'measure_temp'], stdout=PIPE)
+    output, _error = process.communicate()
+    return float(output[output.index('=') + 1:output.rindex("'")])
 
 def push():
     temp = []
@@ -42,32 +47,22 @@ def push():
 
         for i in range(5):
             logging.debug('Starting read {}'.format(i))
-            h, t = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, GPIO_PIN)
-            if h is not None and t is not None:
-                logging.debug('Temperature {}'.format(t))
-                temp.append(t)
-                logging.debug('Humidity {}'.format(h))
-                hum.append(h)
+            cpu_temp_c = get_cpu_temperature()
+            temp_c = weather.temperature()
+            temp_c_cal = temp_c - ((cpu_temp_c-temp_c)/1.3)
+            if temp_c_cal is not None:
+                logging.debug('Temperature {}'.format(temp_c_cal))
+                temp.append(temp_c_cal)
 
         logging.debug('Temperature Values : {}'.format(temp))
         temp = statistics.median(sorted(temp))
         logging.debug('Temperature Median : {}'.format(temp))
-
-        logging.debug('Humidity Values : {}'.format(hum))
-        hum = statistics.median(sorted(hum))
-        logging.debug('Humidity Median : {}'.format(hum))
 
         points = [
            {
                "measurement": "temperature",
                "fields": {
                    "value": temp
-               }
-           },
-           {
-               "measurement": "humidity",
-               "fields": {
-                   "value": hum
                }
            }
         ]

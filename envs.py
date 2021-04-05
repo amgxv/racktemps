@@ -10,5 +10,4 @@ INFLUX_PASS = os.getenv('INFLUX_PASS', '')
 INFLUX_DATABASE = os.getenv('INFLUX_DATABASE', 'default')
 INFLUX_RETENTION_POLICY = os.getenv('INFLUX_RETENTION_POLICY', 'default')
 INFLUX_SSL = os.getenv('INFLUX_SSL', False)
-GPIO_PIN = os.getenv('GPIO_PIN', 4)
 LOGFILE='/var/log/influx_temps_debug.log'
