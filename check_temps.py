@@ -3,18 +3,16 @@
 from influxdb import InfluxDBClient
 import statistics
 import logging
+import subprocess
 from envs import *
 from envirophat import weather
-from subprocess import PIPE, Popen
 
 def get_cpu_temperature():
-    process = Popen(['vcgencmd', 'measure_temp'], stdout=PIPE)
-    output, _error = process.communicate()
-    return float(output[output.index('=') + 1:output.rindex("'")])
+    temp = subprocess.check_output(["/opt/vc/bin/vcgencmd measure_temp | cut -c6-9"], shell=True)[:-1]
+    return float(temp)
 
 def push():
     temp = []
-    hum = []
 
     log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     logging.basicConfig(
